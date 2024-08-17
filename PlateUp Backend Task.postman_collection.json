@@ -1,0 +1,242 @@
+{
+	"info": {
+		"_postman_id": "2ee4ff4e-cf12-4a09-a090-d35ef0449a91",
+		"name": "PlateUp Backend Task",
+		"description": "Platform allowing users to book speaker sessions from the available speaker listings on the platform.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37740653"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "http://127.0.0.1:8080/api/signup",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"first_name\": \"testy\",\n            \"last_name\": \"test\",\n            \"email\": \"test2@person.com\",\n            \"password\": \"test123\",\n            \"role\" : \"user\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/signup",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"signup"
+							]
+						},
+						"description": "**Request Body:**\n\n- `first_name`: User's first name (string, required)\n    \n- `last_name`: User's last name (string, required)\n    \n- `email`: User's email address (string, required)\n    \n- `password`: User's password (string, required)\n    \n- `role`: User's role (\"user\" or \"speaker\") (string, required)\n    \n\n**Response:**\n\n- **Success (201):**\n    \n    - `message`: \"User registered successfully\"\n        \n\n**Error:**\n\n`error`: Specific error message (e.g., \"Email already exists\", \"Internal server error\")\n\nRegisters a new user with the provided details. Sends an OTP (One-Time Password) to the user's email for verification."
+					},
+					"response": []
+				},
+				{
+					"name": "http://127.0.0.1:8080/api/verifyotp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"email\": \"test@person.com\",\n            \"otp\" : \"604032\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/verifyotp",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"verifyotp"
+							]
+						},
+						"description": "**Request Body:**\n\n- `email`: User's email address (string, required)\n    \n- `otp`: Received OTP code (string, required)\n    \n\n**Response:**\n\n- **Success (200):**\n    \n    - `message`: \"User verified\" (if OTP is correct and user wasn't already verified)\n        \n    - `message`: \"User already verified\" (if user was already verified)\n        \n- **Error:**\n    \n    - `error`: Specific error message (e.g., \"Incorrect OTP\", \"Internal server error\")\n        \n\nVerifies the user's email address using the provided OTP. Marks the user as verified upon successful verification."
+					},
+					"response": []
+				},
+				{
+					"name": "http://127.0.0.1:8080/api/login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"email\": \"test@person.com\",\n            \"password\": \"test123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"login"
+							]
+						},
+						"description": "**Request Body:**\n\n- `email`: User's email address (string, required)\n    \n- `password`: User's password (string, required)\n    \n\n**Response:**\n\n- **Success (200):**\n    \n    - `token`: JWT token for user authentication\n        \n- **Error:**\n    \n    - `error`: Specific error message (e.g., \"Invalid Email\", \"Incorrect password\", \"Internal server error\")\n        \n\nAuthenticates the user based on email and password. Returns a JWT token for subsequent API calls."
+					},
+					"response": []
+				}
+			],
+			"description": "Contains endpoints related to user authentication and registration."
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "http://127.0.0.1:8080/api/speakerslist",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHBlcnNvbi5jb20iLCJpYXQiOjE3MjM4OTU2ODJ9.hjTEkrtpGIEZaorFNZo3Ydz4ann2anbxRVc9UkO1AGo",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/speakerslist",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"speakerslist"
+							]
+						},
+						"description": "**Authorization:** Required (JWT token)\n\n**Request Body:**\n\n- `price`: Speaker's session price (integer, required)\n    \n- `expertise`: Speaker's area of expertise (string, required)\n    \n\n**Response:**\n\n- **Success (200):**\n    \n    - `message`: \"Speaker profile created\"\n        \n- **Error:**\n    \n    - `error`: Specific error message (e.g., \"Internal server error\")\n        \n\nAllows speakers to create or update their profiles with pricing and expertise details. Requires user to be authenticated and have the \"speaker\" role."
+					},
+					"response": []
+				}
+			],
+			"description": "Includes endpoints for user-specific operations, such viewing speakers list."
+		},
+		{
+			"name": "Speakers",
+			"item": [
+				{
+					"name": "http://127.0.0.1:8080/api/speakerprofile",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAcGVyc29uLmNvbSIsImlhdCI6MTcyMzg5NTU2NX0.WoNu4aYAUcZ9sGt8hdi4B29Q1rUr6H1mxC5JjvwehRY",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n            \"price\": 10,\n            \"expertise\" : \"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/speakerprofile",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"speakerprofile"
+							]
+						},
+						"description": "**Authorization:** Required (JWT token)\n\n**Response:**\n\n- **Success (200):**\n    \n    - `speakers`: Array of speaker objects containing email, price, and expertise\n        \n- **Error:**\n    \n    - `error`: Specific error message (e.g., \"Internal server error\")\n        \n\n**Description:**\n\nRetrieves a list of all registered speakers with their profiles (price and expertise)."
+					},
+					"response": []
+				}
+			],
+			"description": "Contains endpoints related to speaker management and profile creation."
+		},
+		{
+			"name": "Bookings",
+			"item": [
+				{
+					"name": "http://127.0.0.1:8080/api/booking",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QyQHBlcnNvbi5jb20iLCJpYXQiOjE3MjM4OTU2ODJ9.hjTEkrtpGIEZaorFNZo3Ydz4ann2anbxRVc9UkO1AGo",
+								"type": "default"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"test@person.com\",\n    \"slot\" : \"2024-08-19 09:00:00\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/booking",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"booking"
+							]
+						},
+						"description": "**Authorization:** Required (JWT token)\n\n**Request Body:**\n\n- `email`: Speaker's email address (string, required)\n    \n- `slot`: Desired booking time\n    \n\n**Response:**\n\n- **Success (200):**\n    \n    - `message`: \"Booking successful\"\n        \n- **Error (400):**\n    \n    - `message`: \"Speaker already booked for the requested slot or invalid request body.\"\n        \n- **Error (401):**\n    \n    - `message`: \"Unauthorized access (missing or invalid JWT token).\"\n        \n- **Error (500):**\n    \n    - `message`: \"Internal server error.\"\n        \n\nThis endpoint allows an authenticated user to book a session with a specified speaker at a desired time slot. A valid JWT token is required for authentication."
+					},
+					"response": []
+				}
+			],
+			"description": "Handles endpoints for booking sessions with speakers."
+		}
+	]
+}
