@@ -16,3 +16,5 @@ npx prisma migrate dev
 ```shell
 npm run dev
 ```
+
+4. Import the PlateUp Backend Task.postman_collection.json in your Postman workspace for Postman API documentation 
